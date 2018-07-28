@@ -1,5 +1,6 @@
 var webpack = require('webpack');
 var path = require('path');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const VENDOR_LIBS = [
@@ -26,6 +27,16 @@ module.exports = {
             {
                 use: ['style-loader', 'css-loader'],
                 test: /\.css$/
+            },
+            {
+                test: /\.(jpe?g|png|gif|svg)$/,
+                use: [
+                    {
+                        loader: 'url-loader',
+                        options: { limit: 40000 }
+                    },
+                    'image-webpack-loader'
+                ]
             }
         ]
     },
@@ -38,7 +49,8 @@ module.exports = {
         }),
         new webpack.DefinePlugin({
             'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
-        })
+        }),
+        new ExtractTextPlugin('style.css')
     ]
 
 };
